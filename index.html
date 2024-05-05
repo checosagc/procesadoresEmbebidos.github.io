@@ -1,0 +1,137 @@
+<html>
+<style>div {position: absolute;} </style>
+
+
+<head>
+<title>Proyecto nuevo</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<!-- Save for Web Slices (Proyecto nuevo.psd) -->
+<table id="Table_01" width="1281" height="721" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td>
+			<img src="images/Proyecto nuevo_01.png" width="304" height="145" alt=""></td>
+		<td>
+			<img src="images/Proyecto nuevo_02.png" width="976" height="145" alt=""></td>
+		<td>
+			<img  width="1" height="145" alt=""></td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<img src="images/Proyecto nuevo_03.png" width="1280" height="421" alt=""></td>
+		<td>
+			<img  width="1" height="421" alt=""></td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<img src="images/Proyecto nuevo_04.png" width="1280" height="154" alt=""></td>
+		<td>
+			<img  width="1" height="154" alt=""></td>
+	</tr>
+	<tr>
+		<td>
+			<img  width="304" height="1" alt=""></td>
+		<td>
+			<img  width="976" height="1" alt=""></td>
+		<td></td>
+	</tr>
+</table>
+<!-- End Save for Web Slices -->
+
+<div style="left:84px;top: 203px;">
+	<input type="text" id="t1" style="height: 73px;width:197px; font-size: 18pt;" >
+	
+</div>
+
+<div style="left:352px;top: 203px;">
+	<button id="btn1" style="height:76px;width:196px;font-size: 18pt;"> Leer</button>
+</div>
+
+<div style="left:560px;top: 203px;">
+	<button id="btn2" style="height:76px;width:196px;font-size: 18pt;"> Escribir</button>
+</div>
+
+
+<!-- ++++++++++FIREBASE+++++++++++++++++++++++++++++++++++++-->
+<script type="module">
+	// Import the functions you need from the SDKs you need
+	import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+	import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-analytics.js";
+	// TODO: Add SDKs for Firebase products that you want to use
+	// https://firebase.google.com/docs/web/setup#available-libraries
+  
+	// Your web app's Firebase configuration
+	// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+	const firebaseConfig = {
+	  apiKey: "AIzaSyBS3YfReRXg8zK4nP4iHGaG0aWNvCgVwAE",
+	  authDomain: "esp32preba.firebaseapp.com",
+	  databaseURL: "https://esp32preba-default-rtdb.firebaseio.com",
+	  projectId: "esp32preba",
+	  storageBucket: "esp32preba.appspot.com",
+	  messagingSenderId: "763648173223",
+	  appId: "1:763648173223:web:23f4c433da56704938e782",
+	  measurementId: "G-ENBK09N0QK"
+	};
+  
+	// Initialize Firebase
+	const app = initializeApp(firebaseConfig);
+	const analytics = getAnalytics(app);
+
+    // Se agrega el acceso a la base de datos
+	import {getDatabase,ref,set,child,update,remove,get,onValue}
+	from "https://www.gstatic.com/firebasejs/10.11.1/firebase-database.js";
+	const db=getDatabase();
+
+
+	//--------------Referencias
+	var text1=document.getElementById("t1");
+    var boton1=document.getElementById("btn1");
+	var boton2=document.getElementById("btn2");
+    //---------Leer de DB
+	function SelectData(){
+ 
+ 		const dbref=ref(db);
+
+ 		get(child(dbref,"adc")).then((snapshot)=>{
+	 	if(snapshot.exists()){
+		 			text1.value=snapshot.val().canal1;
+	 	}
+
+		 else{
+		 	alert("No existe el dato");
+	 	}
+ 	})
+ 	.catch((error)=>{
+	 			alerta("Error al leer"+error)
+ 	});
+
+}
+	//---------Escribir a DB
+	function InsertData(){
+        set(ref(db,"ventilador"),{
+            canal1:text1.value,
+            canal0:1.2,
+			hola:"hola"
+        })
+        .then(()=>{
+            alert("Escritura con Exito!!!")
+ 
+        })
+        .catch((error)=>{
+            alerta("Error al escribir"+error)
+        });
+       
+ 
+    }
+
+	//----------Eventos  
+	boton1.addEventListener('click',SelectData);
+	boton2.addEventListener('click',InsertData);
+	//setInterval(SelectData,1000);
+  </script>
+
+<!-- ++++++++++FIREBASE+++++++++++++++++++++++++++++++++++++-->
+
+</body>
+</html>
